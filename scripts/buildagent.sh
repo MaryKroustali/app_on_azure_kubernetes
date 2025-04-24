@@ -7,7 +7,7 @@
 # Define your variables
 token="$1"
 org="MaryKroustali"  # Replace with your GitHub organization name
-repo="containerized_app_on_azure"  # Replace with your GitHub repository name
+repo="kubernetes_on_azure"  # Replace with your GitHub repository name
 
 # Install helping tools
 sudo apt-get update -y

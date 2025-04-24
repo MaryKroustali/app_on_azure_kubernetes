@@ -6,7 +6,7 @@ param application string
 param image string
 
 var vnet_rg_name = 'rg-network-infra-${application}'
-var snet_app_name = 'snet-app-vnet-${application}'
+var snet_nodes_name = 'snet-nodepools-vnet-${application}'
 var vnet_name = 'vnet-${application}'
 var common_rg_name = 'rg-common-infra-${application}'
 var log_name = 'log-${application}'
@@ -17,9 +17,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2024-03-01' existing = {
   name: vnet_name
 }
 
-resource snet_app 'Microsoft.Network/virtualNetworks/subnets@2024-03-01' existing = {
+resource snet_nodepools 'Microsoft.Network/virtualNetworks/subnets@2024-03-01' existing = {
   parent: vnet
-  name: snet_app_name
+  name: snet_nodes_name
 }
 
 resource log 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
@@ -32,16 +32,14 @@ resource rg 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   location: 'northeurope'
 }
 
-module ci '../modules/container/instance.bicep' = {
+module aks '../modules/cluster/kubernetes.bicep' = {
   scope: rg
-  name: 'deploy-ci-${application}'
+  name: 'deploy-aks-${application}'
   params: {
-    name: 'ci-${application}'
-    app_snet_id: snet_app.id
-    acr_rg_name: common_rg_name
-    image: image
-    port: 8080
-    log_id: log.properties.customerId
-    log_key: log.listKeys().primarySharedKey
+    name: 'aks-${application}'
+    aks_snet_id: snet_nodepools.id
+    log_id: log.id
+    sku_tier: 'Free'
+    worker_pools_count: 1
   }
 }

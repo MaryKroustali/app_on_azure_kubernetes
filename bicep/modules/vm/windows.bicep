@@ -6,7 +6,7 @@ param name string
 @description('Resource Location.')
 param location string = resourceGroup().location
 
-@description('''Specifies the name of the administrator account of the Virtual Machine.
+@description('''Specifies the name of the administrator account of the Windows Virtual Machine.
 
 Disallowed values: "administrator", "admin", "user", "user1", "test", "user2", "test1", "user3", "admin1", "1", "123", "a", "actuser", "adm", "admin2", "aspnet", "backup", "console", "david", "guest", "john", "owner", "root", "server", "sql", "support", "support_388945a0", "sys", "test2", "test3", "user4", "user5".
 
@@ -17,7 +17,7 @@ This property cannot be updated after the VM is created.
 @maxLength(20)
 param admin_username string
 
-@description('''Specifies the password of the administrator account of the Virtual Machine.
+@description('''Specifies the password of the administrator account of the Windows Virtual Machine.
 
 Complexity requirements: 3 out of 4 conditions below need to be fulfilled:
 - Has lower characters
@@ -63,7 +63,6 @@ param vnet_rg_name string
 param snet_id string
 
 @description('GitHub Personal Access Token to register Virtual Machine to Github Runners.')
-@secure()
 param github_pat string
 
 // Network Security Group
@@ -74,13 +73,13 @@ module nsg '../network/nsg.bicep' = {
     name: 'nsg-${name}'
     security_rules: [
       {
-        name: 'Allow-SSH'
+        name: 'Allow-RDP'
         properties: {
           access: 'Allow'
           direction: 'Inbound'
           priority: 100
           protocol: 'Tcp'
-          destinationPortRange: '22'  // Allow incoming traffic in 22 (SSH) for Bastion Host
+          destinationPortRange: '3389'  // Allow incoming traffic in 3389 (RDP) for Bastion Host
           sourcePortRange: '*'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
@@ -115,20 +114,19 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
       computerName: name
       adminUsername: admin_username
       adminPassword: admin_password
-      linuxConfiguration: {
-        disablePasswordAuthentication: false
+      windowsConfiguration: {
         patchSettings: {
-          assessmentMode: 'AutomaticByPlatform'
+          patchMode: 'AutomaticByPlatform'
           automaticByPlatformSettings: {
             bypassPlatformSafetyChecksOnUserSchedule: true
           }
-          patchMode: 'AutomaticByPlatform'
+          assessmentMode: 'AutomaticByPlatform'
         }
       }
     }
     storageProfile: {
       osDisk: {
-        osType: 'Linux'
+        osType: 'Windows'
         createOption: 'FromImage'
         caching: 'ReadWrite'
         managedDisk: {
@@ -159,18 +157,18 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
 // Configures Virtual Machine as a GitHub Runner to run workflows on private resources
 resource ext 'Microsoft.Compute/virtualMachines/extensions@2024-07-01' = {
   parent: vm
-  name: 'GithubRunner'
+  name: 'AzureDevopsAgent'
   location: location
   properties: {
-    publisher: 'Microsoft.Azure.Extensions'
-    type: 'CustomScript'
-    typeHandlerVersion: '2.1'
+    publisher: 'Microsoft.Compute'
+    type: 'CustomScriptExtension'
+    typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
     settings: {
-      fileUris: [ 'https://raw.githubusercontent.com/MaryKroustali/kubernetes_on_azure/main/scripts/buildagent.sh' ]  // script configuring the runner
+      fileUris: [ 'https://raw.githubusercontent.com/MaryKroustali/kubernetes_on_azure/main/scripts/buildagent.ps1' ]  // script configuring the runner
     }
     protectedSettings: {
-      commandToExecute: 'bash buildagent.sh ${github_pat}'  // run the script upon initializing the Virtual Machine
+      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File buildagent.ps1 -token ${github_pat}'  // run the script upon initializing the Virtual Machine
     }
   }
 }

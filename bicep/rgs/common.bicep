@@ -109,16 +109,33 @@ module log '../modules/log/workspace.bicep' = {
   }
 }
 
-module vm '../modules/vm/linux.bicep' = {
+module vm_linux '../modules/vm/linux.bicep' = {  // Linux Agent for running pipelines (docker, az, kubectl installed)
   scope: rg
-  name: 'deploy-vm-${application}'
+  name: 'deploy-vm-linux-${application}'
   params: {
-    name: 'vm-${application}'
+    name: 'vm-linux-${application}'
     admin_password: vm_admin_password
     admin_username: vm_admin_username
     image_offer: '0001-com-ubuntu-server-jammy'
     image_publisher: 'Canonical'
     image_sku: '22_04-lts'
+    snet_id: snet_pep.id
+    vm_size: 'Standard_B1ms'
+    vnet_rg_name: vnet_rg_name
+    github_pat: github_pat
+  }
+}
+
+module vm_windows '../modules/vm/windows.bicep' = {  // Windows jump host (UI) to access private resources
+  scope: rg
+  name: 'deploy-vm-win--${application}'
+  params: {
+    name: 'vm-win-${application}'
+    admin_password: vm_admin_password
+    admin_username: vm_admin_username
+    image_offer: 'WindowsServer'
+    image_publisher: 'MicrosoftWindowsServer'
+    image_sku: '2022-Datacenter'
     snet_id: snet_pep.id
     vm_size: 'Standard_B1ms'
     vnet_rg_name: vnet_rg_name

@@ -24,19 +24,10 @@ module vnet '../modules/network/vnet.bicep' = { // Private Virtual Network
     address_prefixes: ['10.1.0.0/26']
     name: 'vnet-${application}'
     subnets: [
-      { // Subnet for container instances, must be delegated for 'Microsoft.ContainerInstance/containerGroups'
-        // https://learn.microsoft.com/en-us/azure/virtual-network/subnet-delegation-overview
-        name: 'snet-app-vnet-${application}'
+      { // Subnet for kubernetes node pools
+        name: 'snet-pools-vnet-${application}'
         properties: {
           addressPrefix: '10.1.0.0/28'
-          delegations: [
-            {
-              name: 'Microsoft.ContainerInstance/containerGroups'
-              properties: {
-                serviceName: 'Microsoft.ContainerInstance/containerGroups'
-              }
-            }
-          ]
         }
       }
       { // Subnet for private endpoints of the resources
@@ -64,13 +55,13 @@ module dns '../modules/network/dns.bicep' = [ for name in dns_zones: {
   }
 } ]
 
-// Resource to access private resources using a public IP safely
-module bastion '../modules/network/bastion.bicep' = {
-  scope: rg
-  name: 'deploy-bastion-${application}'
-  params: {
-    name: 'bastion-${application}'
-    sku_name: 'Basic'
-    snet_id: vnet.outputs.bastion_snet_id
-  }
-}
+// // Resource to access private resources using a public IP safely
+// module bastion '../modules/network/bastion.bicep' = {
+//   scope: rg
+//   name: 'deploy-bastion-${application}'
+//   params: {
+//     name: 'bastion-${application}'
+//     sku_name: 'Basic'
+//     snet_id: vnet.outputs.bastion_snet_id
+//   }
+// }
