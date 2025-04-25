@@ -37,7 +37,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
     agentPoolProfiles: [
       {
         name: 'master'    // Default node pool for cluster management
-        vmSize: 'Standard_B1ms'
+        vmSize: 'Standard_B4s_v2'
         osType: 'Linux'
         mode: 'System'
         count: 1
@@ -73,7 +73,7 @@ resource worker 'Microsoft.ContainerService/managedClusters/agentPools@2024-10-0
   parent: aks
   name: 'worker${i}'
   properties: {
-    vmSize: 'Standard_B1ms'
+    vmSize: 'Standard_B4s_v2'
     osType: 'Linux'
     mode: 'User'
     count: 1
