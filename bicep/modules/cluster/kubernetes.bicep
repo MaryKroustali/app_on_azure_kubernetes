@@ -33,6 +33,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
     tier: sku_tier
   }
   properties: {
+    dnsPrefix: name
     agentPoolProfiles: [
       {
         name: 'master'    // Default node pool for cluster management
@@ -45,7 +46,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
         vnetSubnetID: aks_snet_id   // Node pool subnet
       }
     ]
-    // dnsPrefix: dnsPrefix
     // networkProfile: {
     //   networkPlugin: 'kubenet'
     //   networkPolicy: 'calico'
