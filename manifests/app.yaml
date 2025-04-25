@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: record-store
+  namespace: application
+spec:
+  containers:
+  - name: record-store
+    image: acrrecordstore7pat.azurecr.io/record-store-app:1.0.0 # image from acr
+    ports:
+    - containerPort: 80
+    env:
+    - name: ProxyTo
+      value: http://127.0.0.1:5266 # proxy to the local service
+
+---
+apiVersion: v1 # the service to access the app internally
+kind: Service
+metadata:
+  name: record-store-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: record-store
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

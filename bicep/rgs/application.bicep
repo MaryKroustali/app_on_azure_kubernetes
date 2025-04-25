@@ -38,6 +38,7 @@ module aks '../modules/cluster/kubernetes.bicep' = {
     name: 'aks-${application}'
     aks_snet_id: snet_nodepools.id
     log_id: log.id
+    acr_rg_name: common_rg_name
     sku_tier: 'Free'
     worker_pools_count: 1
   }

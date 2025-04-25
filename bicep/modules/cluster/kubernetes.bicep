@@ -22,11 +22,34 @@ param worker_pools_count int
 @description('Id of the log analytics workspace for monitorinbg the cluster.')
 param log_id string
 
+@description('Name of the resource group containing the Azure Container Registry.')
+param acr_rg_name string
+
+
+// A resource needs to have an identity in order to be assigned permissions
+resource id 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
+  name: 'id-${name}'
+  location: location
+}
+
+// Assign AcrPull permission to AKS cluster
+module rbac './authorization.bicep' = {
+  name: 'deploy-id-${name}-AcrPull'
+  scope: resourceGroup(acr_rg_name)
+  params: {
+    principalId: id.properties.principalId
+    role: '7f951dda-4ed3-4680-a7ca-43fe172d538d' // https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+  }
+}
+
 resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
   name: name
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${id.id}': {}
+    }
   }
   sku: {
     name: 'Base'
@@ -65,7 +88,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
 // Worker node pools for the actual deployments
 resource worker 'Microsoft.ContainerService/managedClusters/agentPools@2024-10-01' = [for i in range(0, worker_pools_count): {
   parent: aks
-  name: 'worker${i}'
+  name: 'worker${i+1}'
   properties: {
     vmSize: 'Standard_B2s_v2'
     osType: 'Linux'
