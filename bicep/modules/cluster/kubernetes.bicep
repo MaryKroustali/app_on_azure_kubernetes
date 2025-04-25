@@ -33,6 +33,18 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
     tier: sku_tier
   }
   properties: {
+    agentPoolProfiles: [
+      {
+        name: 'master'    // Default node pool for cluster management
+        vmSize: 'Standard_B1ms'
+        osType: 'Linux'
+        mode: 'System'
+        count: 1
+        type: 'VirtualMachineScaleSets'
+        enableAutoScaling: false
+        vnetSubnetID: aks_snet_id   // Node pool subnet
+      }
+    ]
     // dnsPrefix: dnsPrefix
     // networkProfile: {
     //   networkPlugin: 'kubenet'
@@ -40,35 +52,19 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
     //   loadBalancerSku: 'Standard'
     //   outboundType: 'userDefinedRouting'
     // }
+    publicNetworkAccess: 'Disabled'   // Disable public access to the cluster
     apiServerAccessProfile: {
-      enablePrivateCluster: true   // Disable public access to the cluster
+      enablePrivateCluster: true
     }
-    // securityProfile: {
-    //   defender: {
-    //     logAnalyticsWorkspaceResourceId: log_id  // Send cluster's logs to Log Analytics Workspace
-    //     securityMonitoring: {
-    //       enabled: true
-    //     }
-    //   }
-    // }
-  }
-}
-
-
-// Node Pools
-
-// Default node pool for cluster management
-resource master 'Microsoft.ContainerService/managedClusters/agentPools@2024-10-01' = {
-  parent: aks
-  name: 'master'
-  properties: {
-    vmSize: 'Standard_B1ms'
-    osType: 'Linux'
-    mode: 'System'
-    count: 1
-    type: 'VirtualMachineScaleSets'
-    enableAutoScaling: false
-    vnetSubnetID: aks_snet_id   // Node pool subnet
+    nodeResourceGroup: 'MC_rg-${name}'  // Name for the managed resource group  (automatically created)
+    securityProfile: {
+      defender: {
+        logAnalyticsWorkspaceResourceId: log_id  // Send cluster's logs to Log Analytics Workspace
+        securityMonitoring: {
+          enabled: true
+        }
+      }
+    }
   }
 }
 
@@ -86,4 +82,3 @@ resource worker 'Microsoft.ContainerService/managedClusters/agentPools@2024-10-0
     vnetSubnetID: aks_snet_id   // Node pool subnet
   }
 }]
-
