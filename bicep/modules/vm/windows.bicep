@@ -1,6 +1,4 @@
 @description('Resource Name.')
-@minLength(1)
-@maxLength(15)
 param name string
 
 @description('Resource Location.')
@@ -111,7 +109,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
       vmSize: vm_size
     }
     osProfile: {
-      computerName: name
+      computerName: substring(name, 0, 15)
       adminUsername: admin_username
       adminPassword: admin_password
       windowsConfiguration: {

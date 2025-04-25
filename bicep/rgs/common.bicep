@@ -128,9 +128,9 @@ module vm_linux '../modules/vm/linux.bicep' = {  // Linux Agent for running pipe
 
 module vm_windows '../modules/vm/windows.bicep' = {  // Windows jump host (UI) to access private resources
   scope: rg
-  name: 'deploy-vm-win--${application}'
+  name: 'deploy-vm-windows-${application}'
   params: {
-    name: 'vm-win-${application}'
+    name: 'vm-windows-${application}'
     admin_password: vm_admin_password
     admin_username: vm_admin_username
     image_offer: 'WindowsServer'
