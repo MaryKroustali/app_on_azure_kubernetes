@@ -5,7 +5,7 @@ targetScope = 'subscription'
 param application string
 
 var vnet_rg_name = 'rg-network-infra-${application}'
-var snet_nodes_name = 'snet-nodepools-vnet-${application}'
+var snet_nodes_name = 'snet-pools-vnet-${application}'
 var vnet_name = 'vnet-${application}'
 var common_rg_name = 'rg-common-infra-${application}'
 var log_name = 'log-${application}'
