@@ -37,7 +37,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
     agentPoolProfiles: [
       {
         name: 'master'    // Default node pool for cluster management
-        vmSize: 'Standard_B4s_v2'
+        vmSize: 'Standard_B2s_v2'
         osType: 'Linux'
         mode: 'System'
         count: 1
@@ -46,12 +46,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
         vnetSubnetID: aks_snet_id   // Node pool subnet
       }
     ]
-    // networkProfile: {
-    //   networkPlugin: 'kubenet'
-    //   networkPolicy: 'calico'
-    //   loadBalancerSku: 'Standard'
-    //   outboundType: 'userDefinedRouting'
-    // }
     publicNetworkAccess: 'Disabled'   // Disable public access to the cluster
     apiServerAccessProfile: {
       enablePrivateCluster: true
@@ -73,7 +67,7 @@ resource worker 'Microsoft.ContainerService/managedClusters/agentPools@2024-10-0
   parent: aks
   name: 'worker${i}'
   properties: {
-    vmSize: 'Standard_B4s_v2'
+    vmSize: 'Standard_B2s_v2'
     osType: 'Linux'
     mode: 'User'
     count: 1
