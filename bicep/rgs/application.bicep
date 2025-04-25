@@ -3,7 +3,6 @@
 targetScope = 'subscription'
 
 param application string
-param image string
 
 var vnet_rg_name = 'rg-network-infra-${application}'
 var snet_nodes_name = 'snet-nodepools-vnet-${application}'

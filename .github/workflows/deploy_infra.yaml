@@ -87,7 +87,7 @@ jobs:
           parameters: application=${{ inputs.application }}
   # deploy_database_infra:
   #   name: Deploy Database Infrastructure
-  #   needs: deploy_application_infra
+  #   needs: deploy_common_infra
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: "Upgrade to latest Bicep version"
