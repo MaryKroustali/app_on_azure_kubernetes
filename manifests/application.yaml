@@ -6,20 +6,31 @@ metadata:
     name: application
 
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1 # deployment - a set of application pods
+kind: Deployment
 metadata:
   name: record-store
   namespace: application
+  labels:
+    app: record-store
 spec:
-  containers:
-  - name: record-store
-    image: acrrecordstore7pat.azurecr.io/record-store-app:1.0.0 # image from acr
-    ports:
-    - containerPort: 80
-    env:
-    - name: ProxyTo
-      value: http://127.0.0.1:5266 # proxy to the local service
+  replicas: 2 # number of pods to run
+  selector:
+    matchLabels:
+      app: record-store
+  template:
+    metadata:
+      labels:
+        app: record-store
+    spec:
+      containers:
+      - name: record-store
+        image: acrrecordstore7pat.azurecr.io/record-store-app:1.0.0 # image from acr
+        ports:
+        - containerPort: 80
+        env:
+        - name: ProxyTo
+          value: http://127.0.0.1:5266 # proxy to the local service
 
 ---
 apiVersion: v1 # the service to app internally accessible
