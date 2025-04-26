@@ -32,4 +32,4 @@ jobs:
           az aks get-credentials --resource-group rg-application-infra-${{ inputs.application }} --name aks-${{ inputs.application }} --overwrite-existing
       - name: Deploy Record Store application
         run: |
-          kubectl apply -f kubernetes_on_azure/manifests/application.yaml
+          kubectl apply -f ./manifests/application.yaml
