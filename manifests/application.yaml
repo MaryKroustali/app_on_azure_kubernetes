@@ -27,7 +27,7 @@ spec:
       - name: record-store
         image: acrrecordstore7pat.azurecr.io/record-store-app:1.0.0 # image from acr
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         env:
         - name: ProxyTo
           value: http://127.0.0.1:5266 # proxy to the local service
@@ -45,4 +45,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 8080

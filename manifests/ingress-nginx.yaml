@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: record-store-ingress
+  namespace: application
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: record-store-svc # service name to route traffic to
+      port:
+        number: 80
