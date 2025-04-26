@@ -38,8 +38,17 @@ module aks '../modules/cluster/kubernetes.bicep' = {
     name: 'aks-${application}'
     aks_snet_id: snet_nodepools.id
     log_id: log.id
-    acr_rg_name: common_rg_name
     sku_tier: 'Free'
     worker_pools_count: 1
+  }
+}
+
+// Assign AcrPull permission to kubelet identity
+module rbac '../modules/cluster/authorization.bicep' = {
+  name: 'deploy-kubelet-AcrPull'
+  scope: resourceGroup(common_rg_name) // resource group that contains the acr
+  params: {
+    principalId: aks.outputs.kubelet_id
+    role: '7f951dda-4ed3-4680-a7ca-43fe172d538d' // https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
   }
 }

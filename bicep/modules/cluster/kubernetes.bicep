@@ -22,34 +22,11 @@ param worker_pools_count int
 @description('Id of the log analytics workspace for monitorinbg the cluster.')
 param log_id string
 
-@description('Name of the resource group containing the Azure Container Registry.')
-param acr_rg_name string
-
-
-// A resource needs to have an identity in order to be assigned permissions
-resource id 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
-  name: 'id-${name}'
-  location: location
-}
-
-// Assign AcrPull permission to AKS cluster
-module rbac './authorization.bicep' = {
-  name: 'deploy-id-${name}-AcrPull'
-  scope: resourceGroup(acr_rg_name)
-  params: {
-    principalId: id.properties.principalId
-    role: '7f951dda-4ed3-4680-a7ca-43fe172d538d' // https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
-  }
-}
-
 resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
   name: name
   location: location
   identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${id.id}': {}
-    }
+    type: 'SystemAssigned'
   }
   sku: {
     name: 'Base'
@@ -99,3 +76,5 @@ resource worker 'Microsoft.ContainerService/managedClusters/agentPools@2024-10-0
     vnetSubnetID: aks_snet_id   // Node pool subnet
   }
 }]
+
+output kubelet_id string = aks.properties.identityProfile.kubeletidentity.objectId // kubelet identity
