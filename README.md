@@ -39,12 +39,12 @@ After setting up NGINX, an  Ingress  resource is created in the     `application
 ## Github Workflows
 The CI/CD workflows are structured similarly to those in the [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/blob/main/README.md#github-actions), with minor adjustments for AKS deployment:
 - `Deploy Infrastructure`: Creates all the necessary Azure resources.
+![Deploy Infrastructure Workflow](./images/deploy-infra-workflow.png)
 - `Push Image to ACR`: Tags and pushes the Docker image to ACR, using the Linux Github Runner.
 - `Import Data to Database`: Importing data into the SQL database, using the Windows Github Runner.
 - `Deploy to AKS`: Applies Kubernetes manifests to deploy the application on the AKS cluster.
 
 [![Deploy Infrastructure](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_infra.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_infra.yaml)
-![Deploy Infrastructure Workflow](./images/deploy-infra-workflow.png.png)
 [![Push Image to ACR](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/push_to_registry.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/push_to_registry.yaml)
 [![Import Data to Database](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/import_db_data.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/import_db_data.yaml)
 [![AKS deployments](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_to_aks.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_to_aks.yaml)
