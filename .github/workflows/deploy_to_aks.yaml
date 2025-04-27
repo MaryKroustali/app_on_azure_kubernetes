@@ -36,6 +36,7 @@ jobs:
       - name: Deploy NGINX Ingress Controller
         run: |
           kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
+          sleep 30 # Wait for the NGINX Ingress Controller to be ready
           kubectl apply -f ./manifests/ingress-nginx.yaml
           external_ip=$(kubectl get svc -n ingress-nginx -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')
           echo "Application is exposed at http://$external_ip"
