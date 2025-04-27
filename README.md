@@ -1,33 +1,53 @@
 # App on Azure Kubernetes Service
-This repository uses container image from [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure)'s packages. This time it is hosted on Azure Kubernetes Service (AKS) to overcome[limitations](https://github.com/MaryKroustali/containerized_app_on_azure?tab=readme-ov-file#limitations) present on Azure light-weight container services.
+This repository demonstrates how to host the [Record Store Application](https://github.com/MaryKroustali/record_store_app) on Azure Kubernetes Service (AKS), using the container image built in  [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure). This approach addresses the [limitations](https://github.com/MaryKroustali/containerized_app_on_azure?tab=readme-ov-file#limitations) of lightweight container services.
 
 ## Architecture
 
-The following architecture uses AKS.
+The following architecture illustrates the deployment of the containerized application on AKS:
 
+![Architecture](./images/architecture.jpg)
 
+### Node Resource Group (MC)
 
-### Managed Resource Group
-
-The aks as infrastructure as a service solution creates a second resource group named `MC_rg-aks-record-store` with all the resources needed for the aks eg Virtual Machine Scale Sets working as Master and Worker node pools. For a detailed description on how kubernetes work on Azure see [Core concepts for AKS](https://learn.microsoft.com/en-us/azure/aks/core-aks-concepts).
+When deploying AKS as an infrastructure-as-a-service solution, Azure automatically creates a second resource group (`MC_rg-aks-record-store`) that contains the underlying infrastructure components such as Virtual Machine Scale Sets, Load Balancers and Managed Disks for the Kubernetes nodes.
+For a detailed description, refer to [Core concepts for AKS](https://learn.microsoft.com/en-us/azure/aks/core-aks-concepts).
 
 #### Authorization to the ACR
 
-In order for the AKS to be authorized to pull images from the ACR for its pods the kubelet identity located in the AKS managed resource group is assigned the `ACRPull` role.
+To allow the AKS cluster to pull images from Azure Container Registry (ACR), the kubelet identity located in the MC resource group is granted the `ACRPull` role assignment on the registry.
 
-## Kubernetes
+## Kubernetes Resources
+
+The [manifests](./manifests/) folder contains Kubernetes YAML files used to deploy and expose the application.
+
+### Application Resources
+
+- Namespace: A namespace named `application` isolates the application resources.
+- Deployment: A Deployment creates two replicas (Pods) running the containerized application, exposing port `8080`.
+- Service: A ClusterIP Service exposes the application internally on port `8080`.
+
+### Ingress Controller (NGINX)
+
+To make the application publicly accessible, an ingress controller is introduced.
+
+The NGINX Ingress Controller is deployed using the official [static manifest](https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/cloud/deploy.yaml).
+
+After setting up NGINX, an  Ingress  resource is created in the     `application` namespace, routing external traffic to the internal application service.
+
+![Application exposed at](./images/app-exposed.png)
 
 ## Github Workflows
-Workflows used for this setup are similar to [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/blob/main/README.md#github-actions) repository:
+The CI/CD workflows are structured similarly to those in the [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/blob/main/README.md#github-actions), with minor adjustments for AKS deployment:
 - `Deploy Infrastructure`: Creates all the necessary Azure resources.
 - `Push Image to ACR`: Tags and pushes the Docker image to ACR, using the Linux Github Runner.
 - `Import Data to Database`: Importing data into the SQL database, using the Windows Github Runner.
-- `Deploy to AKS`: Applies the necessary manifest files to create the application and ingress nginx kubernetes resources.
+- `Deploy to AKS`: Applies Kubernetes manifests to deploy the application on the AKS cluster.
 
 [![Deploy Infrastructure](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_infra.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_infra.yaml)
+![Deploy Infrastructure Workflow](./images/deploy-infra-workflow.png.png)
 [![Push Image to ACR](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/push_to_registry.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/push_to_registry.yaml)
 [![Import Data to Database](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/import_db_data.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/import_db_data.yaml)
 [![AKS deployments](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_to_aks.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_to_aks.yaml)
 
 # Next Steps
-[app_on_aks_gitops](https://github.com/MaryKroustali/app_on_aks_gitops): Managing an application deployment on Azure Kubernetes Service using GitOps (ArgoCD).
+[app_on_aks_gitops](https://github.com/MaryKroustali/app_on_aks_gitops): Managing Kubernetes deployments on Azure Kubernetes Service using GitOps principles with ArgoCD.
