@@ -19,9 +19,6 @@ param sku_tier string
 @maxValue(10)
 param worker_pools_count int
 
-@description('Id of the log analytics workspace for monitorinbg the cluster.')
-param log_id string
-
 resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
   name: name
   location: location
@@ -51,14 +48,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2023-05-01' = {
       enablePrivateCluster: true
     }
     nodeResourceGroup: 'MC_rg-${name}'  // Name for the managed resource group  (automatically created)
-    securityProfile: {
-      defender: {
-        logAnalyticsWorkspaceResourceId: log_id  // Send cluster's logs to Log Analytics Workspace
-        securityMonitoring: {
-          enabled: true
-        }
-      }
-    }
   }
 }
 

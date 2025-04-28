@@ -100,15 +100,6 @@ module vm_password '../modules/keyvault/secret.bicep' = {
   }
 }
 
-module log '../modules/log/workspace.bicep' = {
-  scope: rg
-  name: 'deploy-log-${application}'
-  params: {
-    name: 'log-${application}'
-    sku_name: 'Standalone'
-  }
-}
-
 module vm_linux '../modules/vm/linux.bicep' = {  // Linux Agent for running pipelines (docker, az, kubectl installed)
   scope: rg
   name: 'deploy-vm-linux-${application}'
