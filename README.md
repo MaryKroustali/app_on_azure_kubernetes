@@ -26,16 +26,6 @@ The [manifests](./manifests/) folder contains Kubernetes YAML files used to depl
 - Deployment: A Deployment creates two replicas (Pods) running the containerized application, exposing port `8080`.
 - Service: A ClusterIP Service exposes the application internally on port `8080`.
 
-### Ingress Controller (NGINX)
-
-To make the application publicly accessible, an ingress controller is introduced.
-
-The NGINX Ingress Controller is deployed using the official [static manifest](https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/cloud/deploy.yaml).
-
-After setting up NGINX, an  Ingress  resource is created in the     `application` namespace, routing external traffic to the internal application service.
-
-![Application exposed at](./images/app-exposed.png)
-
 ## Github Workflows
 The CI/CD workflows are structured similarly to those in the [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/blob/main/README.md#github-actions), with minor adjustments for AKS deployment:
 - `Deploy Infrastructure`: Creates all the necessary Azure resources.
