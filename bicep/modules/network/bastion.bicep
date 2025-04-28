@@ -37,26 +37,26 @@ resource pip 'Microsoft.Network/publicIPAddresses@2023-11-01' = {
   }
 }
 
-resource bastion 'Microsoft.Network/bastionHosts@2023-11-01' = { 
-  name: name
-  location: location
-  sku: {
-    name: sku_name
-  }
-  properties: { 
-    ipConfigurations: [
-      {
-        name: 'ip-config'
-        properties: { 
-          privateIPAllocationMethod: private_ip_allocation
-          publicIPAddress: {
-            id: pip.id
-          }
-          subnet: {
-            id: snet_id
-          }
-        }
-      }
-    ]
-  }
-}
+// resource bastion 'Microsoft.Network/bastionHosts@2023-11-01' = { 
+//   name: name
+//   location: location
+//   sku: {
+//     name: sku_name
+//   }
+//   properties: { 
+//     ipConfigurations: [
+//       {
+//         name: 'ip-config'
+//         properties: { 
+//           privateIPAllocationMethod: private_ip_allocation
+//           publicIPAddress: {
+//             id: pip.id
+//           }
+//           subnet: {
+//             id: snet_id
+//           }
+//         }
+//       }
+//     ]
+//   }
+// }
