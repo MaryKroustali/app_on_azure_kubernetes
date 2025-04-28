@@ -9,7 +9,7 @@ The following architecture illustrates the deployment of the containerized appli
 
 ### Node Resource Group (MC)
 
-When deploying AKS as an infrastructure-as-a-service solution, Azure automatically creates a second resource group (`MC_rg-aks-record-store`) that contains the underlying infrastructure components such as Virtual Machine Scale Sets, Load Balancers and Managed Disks for the Kubernetes nodes.
+When deploying AKS as an infrastructure-as-a-service solution, Azure automatically creates a second resource group (`MC_rg-aks-record-store`) that contains the underlying infrastructure components such as Virtual Machine Scale Sets, a Load Balancer and a Network Interface Card for the Kubernetes nodes.
 For a detailed description, refer to [Core concepts for AKS](https://learn.microsoft.com/en-us/azure/aks/core-aks-concepts).
 
 #### Authorization to the ACR
