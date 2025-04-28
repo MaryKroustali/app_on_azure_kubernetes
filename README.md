@@ -18,13 +18,18 @@ To allow the AKS cluster to pull images from Azure Container Registry (ACR), the
 
 ## Kubernetes Resources
 
-The [manifests](./manifests/) folder contains Kubernetes YAML files used to deploy and expose the application.
+The [manifests](./manifests/) folder contains Kubernetes YAML files used to deploy the application.
 
 ### Application Resources
 
 - Namespace: A namespace named `application` isolates the application resources.
 - Deployment: A Deployment creates two replicas (Pods) running the containerized application, exposing port `8080`.
 - Service: A ClusterIP Service exposes the application internally on port `8080`.
+
+To deploy to the AKS the following command is used in `Deploy to AKS` workflow:
+```
+kubectl apply -f ./manifests/application.yaml
+```
 
 ## Github Workflows
 The CI/CD workflows are structured similarly to those in the [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/blob/main/README.md#github-actions), with minor adjustments for AKS deployment:
