@@ -1,5 +1,5 @@
 # App on Azure Kubernetes Service
-This repository demonstrates how to host the [Record Store Application](https://github.com/MaryKroustali/record_store_app) on Azure Kubernetes Service (AKS), using the container image built in  [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure). This approach addresses the [limitations](https://github.com/MaryKroustali/containerized_app_on_azure?tab=readme-ov-file#limitations) of lightweight container services.
+This repository demonstrates how to host the [Record Store Application](https://github.com/MaryKroustali/record_store_app) on Azure Kubernetes Service (AKS), using the container image built in  [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/pkgs/container/record-store-app). This approach addresses the [limitations](https://github.com/MaryKroustali/containerized_app_on_azure?tab=readme-ov-file#limitations) of lightweight container services.
 
 ## Architecture
 
