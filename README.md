@@ -24,12 +24,20 @@ The [manifests](./manifests/) folder contains Kubernetes YAML files used to depl
 
 - Namespace: A namespace named `application` isolates the application resources.
 - Deployment: A Deployment creates two replicas (Pods) running the containerized application, exposing port `8080`.
-- Service: A ClusterIP Service exposes the application internally on port `8080`.
+- Service: A NodePort Service allowing the application to be accessed on randomly assigned port of the worker node.
 
 To deploy to the AKS the following command is used in `Deploy to AKS` workflow:
 ```
 kubectl apply -f ./manifests/application.yaml
 ```
+
+After deployment, to access the application, refer to the output of the **Access the application** step in the workflow, which will be similar to:
+
+```
+Application URL: http://10.1.0.6:32510
+```
+- `10.1.0.6` is the private IP address of the worker node in the cluster
+- `32510` is the node's port randomly allocated to the application
 
 ## Github Workflows
 The CI/CD workflows are structured similarly to those in the [containerized_app_on_azure](https://github.com/MaryKroustali/containerized_app_on_azure/blob/main/README.md#github-actions), with minor adjustments for AKS deployment:
