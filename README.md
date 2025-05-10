@@ -24,7 +24,7 @@ The [manifests](./manifests/) folder contains Kubernetes YAML files used to depl
 
 - Namespace: A namespace named `application` isolates the application resources.
 - Deployment: A Deployment creates two replicas (Pods) running the containerized application, exposing port `8080`.
-- Service: A NodePort Service allowing the application to be accessed on randomly assigned port of the worker node.
+- Service: A NodePort Service allowing the application to be accessed on a randomly assigned port of the worker node.
 
 To deploy to the AKS the following command is used in `Deploy to AKS` workflow:
 ```
