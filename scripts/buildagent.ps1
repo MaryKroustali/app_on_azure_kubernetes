@@ -11,7 +11,7 @@ param(
 )
 
 $org = "MaryKroustali"  # Replace with your GitHub organization name
-$repo = "kubernetes_on_azure"  # Replace with your GitHub repository name
+$repo = "app_on_azure_kubernetes"  # Replace with your GitHub repository name
 
 # Create a folder under admin directory
 cd C:/
