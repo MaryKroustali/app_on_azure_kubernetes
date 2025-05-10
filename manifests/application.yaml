@@ -39,7 +39,7 @@ metadata:
   name: record-store-svc
   namespace: application
 spec:
-  type: ClusterIP
+  type: NodePort # application accessible at http://<NodeIP>:<NodePort>
   selector:
     app: record-store
   ports:

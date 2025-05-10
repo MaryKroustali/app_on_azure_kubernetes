@@ -33,3 +33,8 @@ jobs:
       - name: Deploy Record Store application
         run: |
           kubectl apply -f ./manifests/application.yaml
+      - name: Access the application
+        run: |
+          node_ip=$(kubectl get nodes -o jsonpath='{.items[1].status.addresses[?(@.type=="InternalIP")].address}')
+          node_port=$(kubectl get svc record-store-svc -n application -o jsonpath='{.spec.ports[0].nodePort}')
+          echo "Applicarion URL: http://$node_ip:$node_port"
