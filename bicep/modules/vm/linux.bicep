@@ -165,7 +165,7 @@ resource ext 'Microsoft.Compute/virtualMachines/extensions@2024-07-01' = {
     typeHandlerVersion: '2.1'
     autoUpgradeMinorVersion: true
     settings: {
-      fileUris: [ 'https://raw.githubusercontent.com/MaryKroustali/kubernetes_on_azure/main/scripts/buildagent.sh' ]  // script configuring the runner
+      fileUris: [ 'https://raw.githubusercontent.com/MaryKroustali/app_on_azure_kubernetes/main/scripts/buildagent.sh' ]  // script configuring the runner
     }
     protectedSettings: {
       commandToExecute: 'bash buildagent.sh ${github_pat}'  // run the script upon initializing the Virtual Machine

@@ -39,10 +39,10 @@ The CI/CD workflows are structured similarly to those in the [containerized_app_
 - `Import Data to Database`: Importing data into the SQL database, using the Windows Github Runner.
 - `Deploy to AKS`: Applies Kubernetes manifests to deploy the application on the AKS cluster.
 
-[![Deploy Infrastructure](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_infra.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_infra.yaml)
-[![Push Image to ACR](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/push_to_registry.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/push_to_registry.yaml)
-[![Import Data to Database](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/import_db_data.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/import_db_data.yaml)
-[![AKS deployments](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_to_aks.yaml/badge.svg)](https://github.com/MaryKroustali/kubernetes_on_azure/actions/workflows/deploy_to_aks.yaml)
+[![Deploy Infrastructure](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/deploy_infra.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/deploy_infra.yaml)
+[![Push Image to ACR](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/push_to_registry.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/push_to_registry.yaml)
+[![Import Data to Database](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/import_db_data.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/import_db_data.yaml)
+[![AKS deployments](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/deploy_to_aks.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_kubernetes/actions/workflows/deploy_to_aks.yaml)
 
 # Next Steps
 [app_on_aks_gitops](https://github.com/MaryKroustali/app_on_aks_gitops): Managing Kubernetes deployments on Azure Kubernetes Service using GitOps principles with ArgoCD.
